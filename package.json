@@ -1,0 +1,13 @@
+{
+  "name": "kwery",
+  "version": "1.0.0",
+  "description": "A relational database you can see into: SQL, plans, pages, indexes, transactions, recovery and distributed databases, in the browser.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node tests/conform.mjs && node tests/cc.mjs && node tests/fn.mjs && node tests/aggwin.mjs"
+  },
+  "author": "Jyotiprakash Mishra <mail@jyotiprakash.org>",
+  "license": "GPL-3.0-or-later"
+}
