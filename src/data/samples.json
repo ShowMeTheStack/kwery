@@ -1,0 +1,11 @@
+[
+  { "id": "theatre", "title": "Theatre", "file": "theatre.sql", "about": "Theatre companies, their artists and productions, venues and stages, performances, patrons who book and rate them, and artists who mentor one another." },
+  { "id": "theatre-small", "title": "Theatre (small)", "file": "theatre-small.sql", "about": "The Theatre schema with a handful of rows in each table, small enough to trace a query by hand." },
+  { "id": "theatre-large", "title": "Theatre (large)", "file": "theatre-large.sql", "about": "The Theatre schema with thousands of rows (6000 patrons, 2400 performances, 45000 bookings), where indexes and join algorithms make a difference." },
+  { "id": "creditunion", "title": "Credit union", "file": "creditunion.sql", "about": "Members with share and loan accounts, debit cards, merchants and card payments, and six months of transfers between accounts, for transactions." },
+  { "id": "studio", "title": "Software studio", "file": "studio.sql", "about": "Teams, engineers who report to managers, products, who works on what for how many hours, a weekly on-call rota, and releases." },
+  { "id": "library", "title": "Library", "file": "library.sql", "about": "Books and their authors, copies, members, loans with due dates, and reservations." },
+  { "id": "airline", "title": "Airline", "file": "airline.sql", "about": "Airports, aircraft and their seats, daily flights between hubs and spokes, passengers and a week of bookings." },
+  { "id": "shop", "title": "Shop", "file": "shop.sql", "about": "A tree of categories, products with jsonb attributes and tags, customers, orders, payments and reviews." },
+  { "id": "sensors", "title": "Sensors", "file": "sensors.sql", "about": "Sensors at four sites and three days of readings every 15 minutes, for window functions over a time series." }
+]
