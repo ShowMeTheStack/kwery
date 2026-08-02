@@ -1,0 +1,21 @@
+.qpl { display: flex; flex-direction: column; gap: 12px; }
+.qpl-in { display: flex; flex-direction: column; gap: 8px; }
+.qpl-sql { height: auto; min-height: 64px; padding: 8px 10px; font-family: var(--mono); font-size: 12.5px; resize: vertical; width: 100%; }
+.qpl-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.qpl-t td code { font-size: 11.5px; white-space: normal; }
+.qpl-t tr.na td { color: var(--faint); }
+.qpl-bar { width: 110px; height: 10px; background: var(--line2); border-radius: 5px; overflow: hidden; }
+.qpl-bar i { display: block; height: 100%; background: var(--accent); border-radius: 5px; }
+tr.best .qpl-bar i { background: var(--ok); }
+.qpl-res .muted { margin-bottom: 6px; font-size: 12.5px; }
+.qpl-sort { border: 1px solid var(--line); border-radius: 10px; background: var(--panel2); }
+.qs-t { font: 600 12px var(--font); fill: var(--text); }
+.qs-n { font: 600 11px var(--font); fill: #fff; }
+.qs-more { font: italic 11px var(--font); fill: var(--muted); }
+.qs-b.table { fill: var(--faint); } .qs-b.run { fill: var(--accent); } .qs-b.out { fill: var(--ok); }
+.qpl-f { margin-top: 2px; } .qpl-f code { font-size: 11px; color: var(--muted); white-space: normal; }
+.qpl-t td { white-space: normal; vertical-align: top; }
+.qpl-t { width: 100%; min-width: 0; }
+.qpl-t td:first-child { min-width: 220px; max-width: 300px; }
+.qpl-t .qpl-f code { word-break: break-word; }
+.qpl-t td.num, .qpl-t th { white-space: nowrap; }

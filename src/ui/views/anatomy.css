@@ -1,0 +1,14 @@
+.view-intro { padding: 10px 14px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--line2); background: var(--panel2); }
+.view-intro b { color: var(--text); }
+.anat { display: flex; flex-direction: column; gap: 12px; }
+.anat-step { flex: none; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); overflow: hidden; }
+.anat-h { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--panel2); border-bottom: 1px solid var(--line2); }
+.anat-n { width: 22px; height: 22px; border-radius: 6px; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 700; flex: none; }
+.anat-h code { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.anat-x { margin: 8px 12px; font-size: 13px; color: var(--muted); }
+.anat-meta { margin: 0 12px 6px; font-size: 12px; color: var(--faint); }
+.anat-lens { display: flex; gap: 8px; align-items: center; margin: 0 12px 8px; font-size: 12px; flex-wrap: wrap; }
+.anat-lens span { padding: 1px 8px; border-radius: 999px; }
+.l-t { background: var(--ok2); color: var(--ok); font-weight: 700; } .l-f { background: var(--bad2); color: var(--bad); font-weight: 700; } .l-u { background: var(--warn2); color: var(--warn); font-weight: 700; }
+.grid td.lens-t { color: var(--ok); font-weight: 700; } .grid td.lens-f { color: var(--bad); font-weight: 700; } .grid td.lens-u { color: var(--warn); font-weight: 700; font-style: normal; }
+.grid tr.dropped td:not([class*="lens"]) { opacity: .45; text-decoration: line-through; text-decoration-color: var(--faint); }
