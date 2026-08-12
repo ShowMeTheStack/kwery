@@ -1,0 +1,120 @@
+/* ---- theory workbenches: relational algebra and calculus, design theory ---- */
+.th-view { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.th-intro { margin: 0; padding: 8px 12px; font-size: 12.5px; line-height: 1.5; color: var(--muted); background: var(--panel2); border-bottom: 1px solid var(--line2); }
+.th-intro b { color: var(--text); font-weight: 600; }
+.th-tabs { display: flex; gap: 2px; padding: 6px 8px 0; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: thin; flex: none; }
+.th-tab { border: 1px solid transparent; border-bottom: 0; background: none; padding: 6px 11px; border-radius: 8px 8px 0 0; cursor: pointer; color: var(--muted); font-weight: 500; white-space: nowrap; font-size: 13px; }
+.th-tab:hover { color: var(--text); }
+.th-tab.on { background: var(--panel); border-color: var(--line); color: var(--text); margin-bottom: -1px; box-shadow: inset 0 2px 0 var(--accent); }
+.th-tab .th-lock { font-size: 11px; color: var(--faint); margin-left: 4px; }
+.th-body { flex: 1; overflow: auto; min-height: 0; padding: 10px 12px 28px; display: flex; flex-direction: column; gap: 10px; }
+.th-body > * { flex-shrink: 0; }
+.th-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.th-row .grow { min-width: 8px; }
+.th-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.th-sec { border: 1px solid var(--line); border-radius: var(--r); background: var(--panel); padding: 10px 12px; }
+.th-sec > h3 { margin: 0 0 6px; font-size: 13.5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.th-sec > h3 .muted { font-weight: 400; font-size: 12.5px; }
+.th-note { font-size: 12.5px; color: var(--muted); margin: 4px 0; }
+.th-mono { font-family: var(--mono); font-size: 12.5px; }
+.th-pre { margin: 0; padding: 9px 11px; background: var(--panel2); border: 1px solid var(--line2); border-radius: 8px; font-size: 12.5px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.th-body .btn { height: 30px; padding: 0 10px; }
+.th-body .btn.icon { width: 30px; padding: 0; }
+.th-body .seg button { padding: 4px 10px; font-size: 13px; }
+
+/* the expression editor: coloured text under a transparent textarea, so an error can be underlined in place */
+.th-ed { position: relative; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); }
+.th-ed:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent2); }
+.th-ed-hl, .th-ed-ta { margin: 0; padding: 9px 11px; border: 0; font-family: var(--mono); font-size: 14px; line-height: 1.6; letter-spacing: 0; white-space: pre-wrap; overflow-wrap: anywhere; word-break: normal; tab-size: 2; }
+.th-ed-hl { position: absolute; inset: 0; overflow: hidden; pointer-events: none; color: var(--text); }
+.th-ed-ta { position: relative; display: block; width: 100%; min-height: 44px; resize: none; overflow: hidden; background: transparent; color: transparent; -webkit-text-fill-color: transparent; caret-color: var(--text); outline: none; }
+.th-ed-ta::selection { background: rgba(47, 111, 222, .25); -webkit-text-fill-color: transparent; }
+.th-ed-ta::placeholder { color: var(--faint); -webkit-text-fill-color: var(--faint); }
+.th-sym { color: var(--accent); } .th-kw { color: var(--kw); } .th-str { color: var(--str); } .th-num { color: var(--num); } .th-cm { color: var(--cm); font-style: italic; } .th-br { color: var(--muted); }
+.th-ed-hl .t-kw { font-weight: inherit; }
+.th-msg { display: flex; gap: 8px; align-items: flex-start; padding: 7px 10px; border-radius: 8px; font-size: 13px; }
+.th-msg .ic { width: 16px; height: 16px; margin-top: 1px; flex: none; }
+.th-msg.err { background: var(--bad2); } .th-msg.err .ic { color: var(--bad); }
+.th-msg.warn { background: var(--warn2); } .th-msg.warn .ic { color: var(--warn); }
+.th-msg.ok { background: var(--ok2); } .th-msg.ok .ic { color: var(--ok); }
+.th-msg.info { background: var(--accent2); } .th-msg.info .ic { color: var(--accent); }
+.th-msg .th-hint { color: var(--muted); display: block; margin-top: 2px; }
+.th-pos { font-family: var(--mono); font-size: 11.5px; color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 0 5px; margin-left: 4px; background: var(--panel); white-space: nowrap; }
+
+/* the symbol palette */
+.th-pal { display: flex; flex-wrap: wrap; gap: 3px; }
+.th-key { min-width: 30px; height: 30px; padding: 0 6px; border: 1px solid var(--line); border-radius: 7px; background: var(--panel2); cursor: pointer; font-family: var(--mono); font-size: 15px; color: var(--text); display: inline-grid; place-items: center; }
+.th-key:hover { border-color: var(--accent); color: var(--accent); background: var(--accent2); }
+.th-key.wide { font-family: var(--font); font-size: 12.5px; padding: 0 9px; }
+.th-pal .th-gap { width: 6px; }
+
+/* trees: operators over their operands, as they are usually drawn */
+.th-tree-wrap { overflow: auto; padding: 4px 2px 6px; border: 1px solid var(--line2); border-radius: 10px; background: var(--panel2); }
+.th-tree { position: relative; margin: 0 auto; }
+.th-tree svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.th-edge { fill: none; stroke: var(--line); stroke-width: 2; }
+.th-edge.done { stroke: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.th-node { position: absolute; display: flex; flex-direction: column; justify-content: center; gap: 1px; padding: 4px 9px; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; cursor: pointer; text-align: center; box-shadow: 0 1px 2px rgba(20, 30, 50, .05); }
+.th-node:hover { border-color: var(--faint); }
+.th-node.sel { outline: 2px solid var(--accent); outline-offset: 1px; }
+.th-node.cur { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent2); }
+.th-node.pending { opacity: .42; border-style: dashed; }
+.th-node.leaf { background: var(--accent2); border-color: color-mix(in srgb, var(--accent) 30%, var(--line)); }
+.th-node.changed { border-color: var(--ok); box-shadow: 0 0 0 3px var(--ok2); }
+.th-node.bad { border-color: var(--bad); background: var(--bad2); }
+.tn-top { display: flex; align-items: baseline; justify-content: center; gap: 4px; min-width: 0; white-space: nowrap; }
+.tn-sym { font-size: 16px; color: var(--accent); font-family: var(--mono); flex: none; }
+.th-node.leaf .tn-sym { font-size: 13px; font-weight: 650; color: var(--text); font-family: var(--font); }
+.tn-sub { font-family: var(--mono); font-size: 11.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.tn-subw { font-family: var(--mono); font-size: 11.5px; line-height: 15px; color: var(--muted); overflow-wrap: anywhere; }
+.tn-cnt { font-size: 11px; color: var(--faint); white-space: nowrap; }
+.th-node.cur .tn-cnt, .th-node.sel .tn-cnt { color: var(--accent); font-weight: 600; }
+.tn-badge { position: absolute; top: -7px; right: -7px; min-width: 18px; height: 18px; border-radius: 9px; background: var(--kw); color: #fff; font-size: 10.5px; font-weight: 700; display: grid; place-items: center; padding: 0 4px; }
+.th-forest { display: flex; flex-direction: column; gap: 8px; }
+.th-stmt { font-family: var(--mono); font-size: 12px; color: var(--muted); padding: 2px 4px; }
+
+/* step controls */
+.th-step { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
+.th-step .btn.icon { width: 28px; height: 28px; }
+.th-step-l { font-size: 12.5px; color: var(--muted); margin-left: 6px; font-variant-numeric: tabular-nums; }
+.th-step-l b { color: var(--text); font-weight: 600; }
+
+/* relations */
+.th-rel { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--panel); }
+.th-rel-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding: 7px 10px; background: var(--panel2); border-bottom: 1px solid var(--line2); }
+.th-rel-e { font-family: var(--mono); font-size: 12.5px; overflow-wrap: anywhere; flex: 1 1 200px; }
+.th-rel-n { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.th-rel-n b { color: var(--accent); }
+.th-tbl { max-height: 340px; overflow: auto; }
+.th-tbl .grid { min-width: 100%; }
+.th-tbl .grid td { max-width: 260px; }
+.th-more { padding: 5px 10px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line2); }
+
+/* rules */
+.th-rules { display: flex; flex-direction: column; gap: 6px; }
+.th-rule { border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px; background: var(--panel); display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; }
+.th-rule:hover { border-color: var(--accent); }
+.th-rule-n { font-weight: 600; font-size: 13px; }
+.th-rule-n .num { display: inline-block; min-width: 26px; padding: 0 5px; margin-right: 6px; border-radius: 5px; background: var(--accent2); color: var(--accent); font-size: 11.5px; text-align: center; }
+.th-rule-f { grid-column: 1; font-family: var(--mono); font-size: 11.5px; color: var(--muted); overflow-wrap: anywhere; }
+.th-rule-r { grid-column: 1; font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
+.th-rule .btn { grid-row: 1 / span 3; grid-column: 2; }
+.th-hist { margin: 0; padding-left: 20px; font-size: 12.5px; }
+.th-hist li { margin: 2px 0; }
+
+/* exercises */
+.th-ex { padding: 9px 12px; background: var(--accent2); border-bottom: 1px solid var(--line2); display: flex; flex-direction: column; gap: 6px; }
+.th-ex-t { display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 13px; }
+.th-ex-t > .ic { color: var(--accent); width: 16px; height: 16px; }
+.th-ex-p { font-size: 13.5px; }
+.th-ex .btn { height: 28px; padding: 0 10px; font-size: 13px; }
+.th-verdict { border-radius: 8px; padding: 7px 10px; font-size: 13px; border: 1px solid var(--line); background: var(--panel); }
+.th-verdict.ok { border-color: var(--ok); background: var(--ok2); } .th-verdict.bad { border-color: var(--bad); background: var(--bad2); }
+.th-verdict div + div { margin-top: 3px; }
+.th-guard { text-align: center; padding: 22px 14px; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; }
+.th-guard p { margin: 4px 0 10px; }
+
+/* phone */
+.phone .th-body { padding: 8px 8px 24px; }
+.phone .th-ed-hl, .phone .th-ed-ta { font-size: 13.5px; }
+.phone .th-key { min-width: 32px; height: 32px; }
