@@ -1,0 +1,13 @@
+/* ---- programs view ---- */
+.prog { display: flex; flex-direction: column; gap: 10px; }
+.prog-code { display: block; width: 100%; min-height: 260px; resize: vertical; font-family: var(--mono); font-size: 12.5px; line-height: 1.5; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel2); color: var(--text); tab-size: 2; white-space: pre; overflow: auto; }
+.prog-code:focus { outline: 2px solid var(--accent2); border-color: var(--accent); }
+.prog-form:empty { display: none; }
+.prog-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.prog-lat { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.prog-out { margin: 0; padding: 8px 10px; border: 1px solid var(--line2); border-radius: 8px; background: var(--panel2); font-family: var(--mono); font-size: 12.5px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.prog-out:empty { display: none; }
+.prog .login { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 8px 10px; border: 1px solid var(--line2); border-radius: 8px; }
+.prog .login-t { font-weight: 650; }
+.prog .login label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.prog-api { margin: 0; font-family: var(--mono); font-size: 12px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
