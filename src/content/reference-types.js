@@ -1,0 +1,120 @@
+// Reference content: the data types Kwery supports, with literal syntax, range, storage size and an example.
+// Sizes are the bytes a value takes in a Kwery tuple (fixed-length types as in PostgreSQL; variable-length ones
+// carry a 4-byte length word in front of their bytes).
+(function (root) {
+  'use strict';
+  const K = root.K;
+  const C = K.Content = K.Content || {};
+  const R = C.reference = C.reference || { statements: [], types: [], glossary: [], settings: [], functions: {}, functionGroups: {}, operators: {}, operatorList: [], functionExamples: {} };
+  R.types = R.types || [];
+  const see = [{ lesson: 'int-types' }];
+
+  R.types.push(
+    // ---- numeric ------------------------------------------------------------------------------------------------
+    { id: 'smallint', name: 'smallint', aliases: ['int2'], group: 'Numeric', literal: '42, -7, \'42\'::smallint', range: '-32768 to 32767', size: '2 bytes, aligned on 2 (as in PostgreSQL)',
+      about: 'A small whole number. Arithmetic between two smallints stays smallint, so an overflow is an error (22003) rather than a silent wrap. An integer literal is integer, not smallint: cast it when the type matters.',
+      example: "select 32767::smallint, pg_typeof(1::smallint + 1::smallint), '-32768'::smallint as smallest, (-32767)::smallint - 1::smallint as also_smallest;", see },
+    { id: 'integer', name: 'integer', aliases: ['int', 'int4'], group: 'Numeric', literal: '42, -7, \'42\'::integer', range: '-2147483648 to 2147483647', size: '4 bytes, aligned on 4 (as in PostgreSQL)',
+      about: 'The usual whole-number type, and the type of a literal such as 42 that fits. Division of two integers truncates toward zero (7 / 2 is 3); write 7 / 2.0 or cast to numeric for a fraction. Overflow is an error.',
+      example: 'select 7 / 2 as int_div, 7 / 2.0 as numeric_div, -7 / 2 as toward_zero, 7 % 3 as remainder, pg_typeof(42);', see },
+    { id: 'bigint', name: 'bigint', aliases: ['int8'], group: 'Numeric', literal: '9000000000, \'42\'::bigint', range: '-9223372036854775808 to 9223372036854775807', size: '8 bytes, aligned on 8 (as in PostgreSQL)',
+      about: 'A 64-bit whole number. An integer literal too large for integer becomes bigint. count(*) returns bigint, and sum of integers returns bigint.',
+      example: 'select 9223372036854775807::bigint, pg_typeof(3000000000), pg_typeof(count(*)) from venue;', see },
+    { id: 'numeric', name: 'numeric(p, s)', aliases: ['decimal(p, s)', 'numeric'], group: 'Numeric', literal: '3.14, 1.5e3, numeric \'0.1\'', range: 'Exact decimal. numeric(p, s) keeps s digits after the point and at most p digits in all; plain numeric has no limit.',
+      size: 'Variable: a 4-byte length plus the digits as text. PostgreSQL packs 4 digits into 2 bytes instead.',
+      about: 'An exact decimal number, the right type for money and grades. A literal with a decimal point or exponent is numeric. Values are rounded to the declared scale (halves away from zero); a value with too many digits before the point is an error. Arithmetic is exact, so 0.1 + 0.2 = 0.3.',
+      example: 'select 0.1 + 0.2 = 0.3 as exact, 12345.678::numeric(7,2) as rounded, 1 / 3::numeric as third, pg_typeof(1.5);', see },
+    { id: 'real', name: 'real', aliases: ['float4', 'float(1 to 24)'], group: 'Numeric', literal: '1.5::real, \'1e-3\'::real, \'NaN\'::real, \'Infinity\'::real', range: 'About 6 significant decimal digits, magnitude about 1e-37 to 1e37, plus Infinity, -Infinity and NaN', size: '4 bytes, aligned on 4 (as in PostgreSQL)',
+      about: 'A single-precision binary floating-point number. Many decimal fractions are not exact: compare with a tolerance, not with =.',
+      example: "select 123456789::real, 0.1::real + 0.2::real, 'NaN'::real, pg_typeof(1.5::real);", see },
+    { id: 'double', name: 'double precision', aliases: ['float8', 'float', 'float(25 to 53)'], group: 'Numeric', literal: '1.5::float8, 1e10::double precision', range: 'About 15 significant decimal digits, magnitude about 1e-307 to 1e308, plus Infinity, -Infinity and NaN', size: '8 bytes, aligned on 8 (as in PostgreSQL)',
+      about: 'A double-precision binary floating-point number (IEEE 754). Fast and wide, but inexact: 0.1 + 0.2 is not 0.3. NaN compares equal to itself and greater than every other value, so it sorts last.',
+      example: "select 0.1::float8 + 0.2::float8 as sum, 0.1::float8 + 0.2::float8 = 0.3 as equal, sqrt(2::float8), 'Infinity'::float8 > 1e308;", see },
+    { id: 'serial', name: 'serial', aliases: ['smallserial', 'bigserial', 'serial4', 'serial8'], group: 'Numeric', literal: 'Only in a column definition: id serial primary key', range: 'As integer (smallserial: smallint, bigserial: bigint)', size: 'As integer, smallint or bigint',
+      about: 'Not a real type but shorthand: the column gets the integer type, NOT NULL, and a default of nextval() on a new sequence that the column owns. The SQL standard form is GENERATED BY DEFAULT AS IDENTITY (or ALWAYS, which refuses explicit values unless OVERRIDING SYSTEM VALUE is given).',
+      example: "begin; create table ref_serial (id serial primary key, code int generated always as identity, label text); insert into ref_serial (label) values ('a'), ('b'); select * from ref_serial; rollback;", see },
+
+    // ---- character ----------------------------------------------------------------------------------------------
+    { id: 'char', name: 'char(n)', aliases: ['character(n)', 'bpchar'], group: 'Character', literal: '\'abc\'::char(5)', range: 'Exactly n characters (char alone is char(1))', size: 'A 4-byte length plus the padded string in UTF-8. PostgreSQL uses a 1-byte length for short values.',
+      about: 'A fixed-length string, padded with spaces to n. Trailing spaces are not significant: they are ignored in comparisons and dropped when the value is converted to text or concatenated. A longer value is an error unless the extra characters are spaces; an explicit cast cuts it.',
+      example: "select 'abc'::char(5) || '|' as concat, length('abc'::char(5)), 'abc'::char(5) = 'abc  ' as equal, 'abcdef'::char(3) as cut;", see },
+    { id: 'varchar', name: 'varchar(n)', aliases: ['character varying(n)'], group: 'Character', literal: '\'abc\'', range: 'At most n characters; varchar with no n has no limit', size: 'A 4-byte length plus the string in UTF-8. PostgreSQL uses a 1-byte length for values under 127 bytes.',
+      about: 'A variable-length string with a limit. Storing a longer value is an error (22001) unless the extra characters are spaces; an explicit cast cuts it silently. The Theatre sample uses varchar for names and ids.',
+      example: "select 'abcdef'::varchar(3) as cut, pg_typeof(title), max(length(title)) from production group by 2;", see },
+    { id: 'text', name: 'text', aliases: ['clob'], group: 'Character', literal: '\'it\'\'s\', E\'tab\\there\', $$dollar quoted$$', range: 'Any string of characters', size: 'A 4-byte length plus the string in UTF-8',
+      about: 'A string of any length; the type of most string functions. Single quotes delimit a literal and a quote inside is doubled. E\'...\' allows backslash escapes; $$...$$ (dollar quoting) takes the text as it is. Strings compare by code point (the C collation), so upper-case letters sort before lower-case.',
+      example: "select 'it''s', E'a\\tb', $$no 'escapes' here$$, 'B' < 'a' as by_code_point, 'Kw' || 'ery';", see },
+
+    // ---- boolean ------------------------------------------------------------------------------------------------
+    { id: 'boolean', name: 'boolean', aliases: ['bool'], group: 'Boolean', literal: "true, false, 't', 'yes', 'on', '1', null", range: 'true, false, and NULL (unknown)', size: '1 byte (as in PostgreSQL)',
+      about: 'A truth value with SQL\'s three-valued logic: a comparison with NULL is unknown, and WHERE keeps only rows whose condition is true. Input accepts true/false, t/f, yes/no, on/off and 1/0; output is t or f.',
+      example: "select 'yes'::boolean, 'off'::boolean, null::boolean is unknown, true and null as and_null, true or null as or_null;", see },
+
+    // ---- date and time ------------------------------------------------------------------------------------------
+    { id: 'date', name: 'date', group: 'Date and time', literal: "date '2024-07-04', '2024-07-04'::date, 'infinity'", range: 'Calendar dates (proleptic Gregorian), plus infinity and -infinity', size: '4 bytes, days since 2000-01-01 (as in PostgreSQL)',
+      about: 'A calendar day without a time. date + integer adds days; date - date gives the number of days between them; date + interval gives a timestamp. Input is ISO (YYYY-MM-DD) by default.',
+      example: "select date '2024-02-28' + 1 as next_day, date '2024-12-25' - date '2024-01-01' as days, date '2024-01-31' + interval '1 month' as plus_month;", see },
+    { id: 'time', name: 'time', aliases: ['time without time zone'], group: 'Date and time', literal: "time '13:45', '13:45:30.25'::time", range: '00:00:00 to 24:00:00, to the microsecond', size: '8 bytes (as in PostgreSQL)',
+      about: 'A time of day without a date or zone. time - time gives an interval; time + interval wraps around midnight. time with time zone is not supported.',
+      example: "select time '13:45' + interval '30 minutes', time '17:00' - time '09:30', time '23:30' + interval '1 hour';", pg: 'PostgreSQL also has time with time zone (timetz); Kwery does not.', see },
+    { id: 'timestamp', name: 'timestamp', aliases: ['timestamp without time zone', 'timestamp(p)'], group: 'Date and time', literal: "timestamp '2024-07-04 15:30:00', '2024-07-04T15:30'::timestamp", range: 'Dates and times to the microsecond, plus infinity and -infinity', size: '8 bytes (as in PostgreSQL)',
+      about: 'A date and time of day, with no time zone attached: it means the same wall-clock reading everywhere. timestamp - timestamp gives an interval; timestamp + interval gives a timestamp.',
+      example: "select timestamp '2024-07-04 15:30' + interval '2 hours 15 minutes', timestamp '2024-07-04 15:30' - timestamp '2024-07-01 09:00', date_trunc('day', timestamp '2024-07-04 15:30');", see },
+    { id: 'timestamptz', name: 'timestamptz', aliases: ['timestamp with time zone'], group: 'Date and time', literal: "timestamptz '2024-07-04 15:30+02', now()", range: 'Instants in time to the microsecond, plus infinity and -infinity', size: '8 bytes, microseconds since 2000-01-01 UTC (as in PostgreSQL)',
+      about: 'An absolute instant. On input an offset or zone name in the text is used (else the session\'s timezone); the value is kept in UTC and shown in the session\'s timezone. It does not remember the zone it was written in. AT TIME ZONE converts to a local timestamp in a given zone.',
+      example: "select timestamptz '2024-07-04 12:00+00' at time zone 'Asia/Tokyo' as tokyo_wall_clock, timestamptz '2024-07-04 12:00+02' = timestamptz '2024-07-04 10:00+00' as same_instant;", see },
+    { id: 'interval', name: 'interval', group: 'Date and time', literal: "interval '1 year 2 months 3 days 04:05:06', interval '90 minutes', '2 weeks'::interval", range: 'Months, days and microseconds, each with a sign', size: '16 bytes: months, days and microseconds kept apart (as in PostgreSQL)',
+      about: 'A span of time. It keeps months, days and time separately because a month has no fixed number of days and a day may not have 24 hours: adding 1 month to January 31 gives the last day of February. justify_days and justify_hours trade between the parts.',
+      example: "select interval '1 day' + interval '25 hours', interval '1 month' * 1.5, interval '3 hours' / 4, justify_hours(interval '50 hours'), extract(epoch from interval '1 hour');", see },
+
+    // ---- binary, json, uuid -------------------------------------------------------------------------------------
+    { id: 'bytea', name: 'bytea', aliases: ['blob', 'binary large object'], group: 'Binary', literal: "'\\xdeadbeef'::bytea, decode('3q2+7w==', 'base64')", range: 'Any sequence of bytes', size: 'A 4-byte length plus the bytes',
+      about: 'A byte string. It is written and shown in hex form (\\x followed by two hex digits per byte). length gives the number of bytes; encode and decode convert to and from hex, base64 and escape text.',
+      example: "select '\\xdeadbeef'::bytea, length('\\xdeadbeef'::bytea), encode('Kwery'::bytea, 'base64'), decode('4b77657279', 'hex');", see },
+    { id: 'json', name: 'json', group: 'JSON', literal: '\'{"a": 1, "b": [true, null]}\'::json', range: 'Any JSON text', size: 'A 4-byte length plus the text as written',
+      about: 'JSON kept as the exact text that was given: spacing, key order and duplicate keys stay. It is checked on input. Use jsonb unless the original text must be kept.',
+      example: "select '{\"b\": 1,   \"a\": 2, \"a\": 3}'::json as kept, '{\"b\": 1, \"a\": 2}'::json -> 'a' as field, json_typeof('[1, 2]');", see },
+    { id: 'jsonb', name: 'jsonb', group: 'JSON', literal: '\'{"a": 1}\'::jsonb, jsonb_build_object(\'a\', 1)', range: 'Any JSON value', size: 'A 4-byte length plus the normalized text. PostgreSQL stores a binary tree instead.',
+      about: 'JSON in a normalized form: keys sorted, duplicate keys removed (the last wins), whitespace dropped. It supports equality, containment (@>, <@), key tests (?, ?|, ?&), path access (-> ->> #> #>>), SQL/JSON paths and indexing.',
+      example: "select '{\"b\": 1, \"a\": 2, \"a\": 3}'::jsonb as normalized, '{\"tags\": [\"x\", \"y\"]}'::jsonb @> '{\"tags\": [\"y\"]}' as contains, '{\"a\": {\"b\": 5}}'::jsonb #>> '{a,b}' as path;", see },
+    { id: 'uuid', name: 'uuid', group: 'UUID', literal: "'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'::uuid, gen_random_uuid()", range: '128-bit identifiers', size: '16 bytes (as in PostgreSQL)',
+      about: 'A universally unique identifier, shown as 32 hex digits in groups of 8-4-4-4-12. Input also accepts upper case, braces and missing hyphens. gen_random_uuid() makes a random (version 4) one, a common default for a surrogate key.',
+      example: "select 'A0EEBC99-9C0B-4EF8-BB6D-6BB9BD380A11'::uuid, gen_random_uuid() <> gen_random_uuid() as different;", see },
+
+    // ---- arrays, composites -------------------------------------------------------------------------------------
+    { id: 'array', name: 'type[]', aliases: ['integer[]', 'text[]', 'type array'], group: 'Arrays, composites and ranges', literal: "array[1, 2, 3], '{1,2,3}'::int[], '{{1,2},{3,4}}'::int[][]", range: 'Arrays of any base type, of any number of dimensions', size: 'A 4-byte length plus the text form of the array. PostgreSQL stores a binary header and the elements.',
+      about: 'An array of values of one type. Subscripts start at 1; a[2] is an element, a[2:3] a slice, and a subscript out of range gives NULL. Arrays compare element by element. = ANY(a) tests membership, unnest turns an array into rows, array_agg collects rows into an array. Arrays break first normal form, which is why a normalized design puts a multivalued attribute in a relation of its own; SQL has them for convenience.',
+      example: "select (array[10, 20, 30])[2] as second, (array[10, 20, 30])[2:3] as slice, 20 = any(array[10, 20, 30]) as member, array_length(array[[1,2],[3,4]], 1), '{a,b}'::text[] || 'c'::text as appended;", see },
+    { id: 'composite', name: 'composite type', aliases: ['row type', 'record'], group: 'Arrays, composites and ranges', literal: "row(1, 'x'), (1, 'x')::pair, CREATE TYPE pair AS (n int, s text)", range: 'A row of named fields', size: 'A 4-byte length plus the text form of the row',
+      about: 'A structured value with named fields, made with CREATE TYPE name AS (field type, ...). Every table also defines a row type of the same name. ROW(...) builds one; (value).field reads a field. An anonymous row has type record.',
+      example: "begin; create type ref_pair as (n int, s text); select row(1, 'x')::ref_pair as pair, (row(1, 'x')::ref_pair).s as field, v from venue v where v.venue_code = (select min(venue_code) from venue); rollback;", see },
+    { id: 'range', name: 'range types', aliases: ['int4range', 'daterange', 'tsrange'], group: 'Arrays, composites and ranges', literal: 'Not supported', range: '-', size: '-',
+      about: 'PostgreSQL has built-in range types (int4range, numrange, daterange, tsrange, tstzrange) with operators such as && and @>. Kwery does not support them: store the two bounds in two columns and compare them, or use OVERLAPS for periods.',
+      example: "select (date '2024-01-01', date '2024-02-01') overlaps (date '2024-01-15', date '2024-03-01') as periods_overlap;", pg: 'CREATE TYPE ... AS RANGE is parsed, but range values are not supported.' },
+
+    // ---- enumerations and domains -------------------------------------------------------------------------------
+    { id: 'enum', name: 'enumerated type', aliases: ['CREATE TYPE ... AS ENUM'], group: 'Enumerations and domains', literal: "CREATE TYPE mood AS ENUM ('low', 'ok', 'high'); 'ok'::mood", range: 'The listed labels', size: 'A 4-byte length plus the label. PostgreSQL stores 4 bytes (the label\'s oid).',
+      about: 'A type with a fixed, ordered list of labels. Values sort in the order the labels were declared, not alphabetically. ALTER TYPE ... ADD VALUE adds a label (BEFORE or AFTER an existing one); a value that is not a label is an error.',
+      example: "begin; create type ref_level as enum ('low', 'medium', 'high'); select l, l > 'low' as above_low from unnest(array['high', 'low', 'medium']::ref_level[]) l order by l; rollback;", see },
+    { id: 'domain', name: 'domain', aliases: ['CREATE DOMAIN'], group: 'Enumerations and domains', literal: 'CREATE DOMAIN name AS base_type [DEFAULT ...] [NOT NULL] [CHECK (...)]', range: 'The values of the base type that pass the checks', size: 'As the base type',
+      about: 'A named base type with constraints, written once and used in many columns. CHECK conditions refer to the value as VALUE. A value that fails a check is an error (23514) wherever it is cast or stored.',
+      example: "begin; create domain ref_seats as smallint check (value between 1 and 8); select 4::ref_seats; rollback;", see },
+
+    // ---- special ------------------------------------------------------------------------------------------------
+    { id: 'regclass', name: 'regclass', group: 'Special', literal: "'production'::regclass", range: 'Names of relations', size: '4 bytes (as in PostgreSQL: an oid)',
+      about: 'A relation identified by its name. Casting a name to regclass looks it up; the value shows as the name. It is used with catalog queries and functions that take a table.',
+      example: "select 'production'::regclass, pg_typeof('production'::regclass);", pg: 'PostgreSQL rejects a name that is not a relation (42P01); Kwery accepts any name.' },
+    { id: 'record', name: 'record', group: 'Special', literal: 'row(1, 2), a function RETURNS record', range: 'Any row', size: 'As a composite',
+      about: 'The type of a row whose fields are not described by a named type: an anonymous ROW(...), or the result of a function declared RETURNS record or RETURNS SETOF record, which needs a column definition list where it is called.',
+      example: "select row(1, 'a') as r, pg_typeof(row(1, 'a'));" },
+    { id: 'void', name: 'void', group: 'Special', literal: 'RETURNS void', range: 'No value', size: '0',
+      about: 'The result type of a function that returns nothing, such as pg_sleep or setseed. Used in CREATE FUNCTION ... RETURNS void.',
+      example: 'select pg_typeof(pg_sleep(0));' },
+    { id: 'trigger', name: 'trigger', group: 'Special', literal: 'RETURNS trigger', range: 'No value', size: '0',
+      about: 'The declared result type of a trigger function. Such a function is called by a trigger, not directly; in PL/pgSQL it returns NEW, OLD or NULL.',
+      see: [{ lesson: 'adv-triggers' }] },
+    { id: 'unknown', name: 'unknown', group: 'Special', literal: "'abc' before its type is decided", range: '-', size: '-',
+      about: 'The type a quoted literal has until the context decides it: in 1 + \'2\' the literal becomes an integer, in a comparison with a date it becomes a date. A literal that never gets a context becomes text.',
+      example: "select 1 + '2' as becomes_int, date '2024-01-01' < '2024-06-01' as becomes_date, pg_typeof('abc');" },
+  );
+})(typeof window !== 'undefined' ? window : globalThis);
