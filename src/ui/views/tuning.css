@@ -1,0 +1,31 @@
+/* ---- tuning view ---- */
+.tu-sql { width: 100%; min-height: 180px; resize: vertical; font-family: var(--mono); font-size: 12.5px; line-height: 1.5; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel2); color: var(--text); tab-size: 2; }
+.tu-sql:focus { outline: 2px solid var(--accent2); border-color: var(--accent); }
+.tu-res { display: flex; flex-direction: column; gap: 14px; }
+.tu-bars { display: grid; grid-template-columns: minmax(0, 1fr) max-content; gap: 9px 10px; }
+/* every bar shares the value column, as wide as the widest value */
+.tu-bar { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; gap: 3px 10px; align-items: center; }
+.tu-bq { grid-column: 1 / -1; display: flex; gap: 7px; align-items: baseline; min-width: 0; font-size: 12.5px; }
+.tu-bq code { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.tu-w { font-size: 11.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.tu-bt { position: relative; height: 16px; background: var(--line2); border-radius: 4px; overflow: hidden; }
+.tu-bt i { position: absolute; left: 0; display: block; border-radius: 0 4px 4px 0; }
+.tu-bt i.b { top: 0; height: 100%; background: color-mix(in srgb, var(--muted) 40%, transparent); }
+.tu-bt i.a { top: 4px; height: 8px; background: var(--accent); }
+.tu-bv { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+.tu-save { color: var(--ok); font-weight: 650; }
+.tu-ba { grid-column: 1 / -1; font-size: 11.5px; color: var(--faint); font-family: var(--mono); overflow-wrap: anywhere; }
+.tu tr.tu-tot td { border-top: 1px solid var(--line); background: var(--panel2); }
+.tu-det summary { cursor: pointer; font-size: 13px; color: var(--accent); }
+.tu-det .ls-sql { margin-top: 6px; border-radius: 8px; font-size: 12px; white-space: pre-wrap; }
+.tu-chart { margin: 0 auto; }
+.tu-gl { stroke: var(--line2); stroke-width: 1; }
+.tu-axl { fill: var(--faint) !important; }
+.tu-line { fill: none; stroke-width: 2.4; stroke-linejoin: round; }
+.tu-line.rc, .tu-pt.rc { stroke: var(--accent); } .tu-pt.rc { fill: var(--accent); }
+.tu-line.ser, .tu-pt.ser { stroke: var(--warn); } .tu-pt.ser { fill: var(--warn); }
+.tu-pt { stroke: var(--panel) !important; stroke-width: 2; }
+.tu .adv-legend i.tu-krc { background: var(--accent); }
+.tu .adv-legend i.tu-kser { background: var(--warn); }
+.tu-bench { align-items: start; }
+@container (max-width: 520px) { .tu-bars, .tu-bar { grid-template-columns: minmax(0, 1fr); } }
