@@ -1,0 +1,42 @@
+/* ---- data cube view ---- */
+.ox-axes { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.ox-axis { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.ox-axl { font-size: 12px; color: var(--muted); min-width: 56px; }
+.ox-axis .inp { height: 30px; padding: 0 6px; font-size: 13px; }
+.ox-xtw { border: 1px solid var(--line); border-radius: 9px; }
+.ox-xt { border-collapse: separate; border-spacing: 0; font-size: 12.5px; font-variant-numeric: tabular-nums; width: max-content; min-width: 100%; }
+.ox-xt th, .ox-xt td { padding: 5px 10px; border-bottom: 1px solid var(--line2); white-space: nowrap; }
+.ox-xt thead th { background: var(--panel2); font-weight: 600; text-align: right; position: sticky; top: 0; z-index: 1; border-bottom: 1px solid var(--line); }
+.ox-xt th.ox-corner { text-align: left; display: flex; flex-direction: column; gap: 1px; font-weight: 500; position: sticky; left: 0; z-index: 2; background: var(--panel2); }
+.ox-ax { font-size: 11px; color: var(--muted); }
+.ox-xt th.ox-rh { text-align: left; font-weight: 600; background: var(--panel); position: sticky; left: 0; z-index: 1; border-right: 1px solid var(--line2); }
+.ox-xt td.ox-c { text-align: right; background: color-mix(in srgb, var(--accent) var(--p, 0%), transparent); }
+.ox-xt td.ox-0 { color: var(--faint); text-align: center; }
+.ox-xt td.ox-t, .ox-xt th.ox-all { text-align: right; font-weight: 650; background: var(--panel2); }
+.ox-xt tr.ox-tr td, .ox-xt tr.ox-tr th { border-top: 1px solid var(--line); border-bottom: 0; }
+.ox-xt td.ox-g { color: var(--accent); }
+.ox-drill { border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: zoom-in; text-decoration: underline dotted var(--faint); text-underline-offset: 3px; }
+.ox-drill:hover { color: var(--accent); }
+.ox-dice { display: flex; flex-direction: column; gap: 5px; padding: 6px 0; border-top: 1px solid var(--line2); }
+.ox-dice:first-of-type { border-top: 0; }
+.ox-dn { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+.ox-dn .link, .ox-dn .muted { font-size: 12px; }
+.ox-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.ox-chip { border: 1px solid var(--line); background: var(--panel); color: var(--faint); border-radius: 999px; padding: 2px 10px; font-size: 12px; cursor: pointer; text-decoration: line-through; }
+.ox-chip.on { background: var(--accent2); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); text-decoration: none; font-weight: 600; }
+.ox-chip:hover { border-color: var(--accent); }
+.ox-lat .ox-ln { cursor: pointer; outline: none; }
+.ox-lat .ox-ln rect { fill: var(--panel); stroke: var(--line); stroke-width: 1.3; }
+.ox-lat .ox-ln.used rect { fill: var(--accent2); stroke: color-mix(in srgb, var(--accent) 45%, transparent); }
+.ox-lat .ox-ln.sel rect { stroke: var(--accent); stroke-width: 2.4; }
+.ox-lat .ox-ln:hover rect, .ox-lat .ox-ln:focus rect { stroke: var(--accent); }
+.ox-lat .ox-lt { fill: var(--text); font-weight: 600; font-size: 11.5px; }
+.ox-lat .ox-lr { fill: var(--muted); font-size: 11px; }
+.ox-le { stroke: var(--line); stroke-width: 1.2; }
+.ox-le.on { stroke: var(--accent); stroke-width: 1.8; }
+.ox-nodeh { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 13px; }
+.ox-det summary { cursor: pointer; font-size: 13px; color: var(--accent); margin-bottom: 6px; }
+.ox-colpick { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+.ox-cp { display: inline-flex; gap: 5px; align-items: center; font-size: 13px; font-family: var(--mono); }
+.ox-cp input { accent-color: var(--accent); }
+.ox-lat { margin: 0 auto; }
