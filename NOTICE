@@ -1,0 +1,85 @@
+Kwery
+Copyright (c) 2026 Jyotiprakash Mishra <mail@jyotiprakash.org>
+https://kwery.jyotiprakash.org
+
+This notice says which terms cover which parts of this repository. If a file is
+not listed below, it is covered by section 1.
+
+
+1. SOFTWARE AND CONTENT: GNU General Public License v3.0 or later, with an
+   attribution term
+   -------------------------------------------------------------------------------
+
+   Covered: everything in this repository, including the database engine (the
+   parser, binder, planner, executor, storage, buffer manager, indexes, lock
+   manager, concurrency control, log and recovery), the cluster simulator, the
+   E-R and design theory tools, every view of the workbench, the lessons, tours,
+   exercises and their checkers, the reference and glossary, the sample
+   databases and their generators, the build and test tools, and the built
+   index.html.
+
+   License text: LICENSE (GNU GPL v3.0). You may use, modify and distribute this
+   work under GPL-3.0-or-later. Derived works must be distributed under the same
+   license, with their complete corresponding source code.
+
+   Additional term under section 7(b) of the GNU GPL v3.0:
+   Every copy and every derived work must preserve the following author
+   attribution, both in the source files and in the Appropriate Legal Notices
+   displayed by any work that contains or is built from this software (for an
+   interactive program or a website, in an "About" box or on a page that is
+   reachable from every screen, such as an "About" or "Credits" page):
+
+       Based on "Kwery" by Jyotiprakash Mishra
+       (https://kwery.jyotiprakash.org)
+
+   This applies equally to modified versions, translations, ports to other
+   languages, and works that include any part of the lessons, the exercises,
+   the views or the sample databases, including screenshots or recordings of
+   the views used as teaching material. Removing or obscuring this attribution
+   is a violation of the license, and under section 8 of the GNU GPL it
+   terminates your rights under it.
+
+   Additional term under section 7(c) of the GNU GPL v3.0:
+   Modified versions must be marked as changed from the original, in reasonable
+   ways, and must not be presented as the original Kwery.
+
+
+2. NAMES (not licensed)
+   -------------------------------------------------------------------------------
+
+   The name "Kwery" as the name of this program, and the domain
+   kwery.jyotiprakash.org, identify the author's work. Under section 7(e) of the
+   GNU GPL v3.0, no rights are granted to use them for a derived work, except to
+   give the attribution required above.
+
+
+3. THE SQL LANGUAGE AND THE COMPANION TEXT
+   -------------------------------------------------------------------------------
+
+   Kwery implements the SQL language as standardised in ISO/IEC 9075, and where
+   the standard leaves a choice it behaves as PostgreSQL does. Its engine, its
+   views and its teaching material were written from scratch.
+
+   The lessons follow the chapter order and the terms of "Database System
+   Concepts" by Abraham Silberschatz, Henry F. Korth and S. Sudarshan (7th
+   edition, McGraw-Hill, 2019), which is cited as the companion text. The
+   sample databases, their data, and all text, figures, examples and
+   exercises are Kwery's own; none is taken from the book.
+
+
+4. TRADEMARKS
+   -------------------------------------------------------------------------------
+
+   PostgreSQL is a registered trademark of the PostgreSQL Community Association
+   of Canada. Oracle and MySQL are registered trademarks of Oracle and/or its
+   affiliates. SQL Server is a trademark of Microsoft Corporation. SQLite is a
+   registered trademark of Hipp, Wyrick & Company, Inc. McGraw-Hill is a
+   trademark of McGraw Hill LLC. Chrome and Chromium are trademarks of Google
+   LLC. Safari is a trademark of Apple Inc. Firefox is a trademark of the
+   Mozilla Foundation. GitHub is a trademark of GitHub, Inc. All other
+   trademarks are the property of their respective owners.
+
+   These names are used only to describe compatibility and the companion text.
+   Kwery is an independent work. It is not affiliated with, endorsed by, or
+   sponsored by any of these organisations or by the authors or publisher of
+   the companion text.
