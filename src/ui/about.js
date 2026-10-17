@@ -43,6 +43,7 @@
       ['Compy', 'https://compy.jyotiprakash.org', 'a C compiler you can see through, phase by phase'],
       ['Baysik', 'https://baysik.jyotiprakash.org', 'GW-BASIC and QBasic, with a debugger'],
       ['Lohgo', 'https://lohgo.jyotiprakash.org', 'Logo with turtle graphics and a debugger'],
+      ['Tooring', 'https://tooring.jyotiprakash.org', 'theory of computation you can play with, from automata to NP-completeness'],
       ['NetSim', 'https://netsim.jyotiprakash.org', 'a network simulator you can watch packet by packet'],
     ],
     links: [
