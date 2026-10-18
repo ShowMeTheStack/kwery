@@ -45,6 +45,7 @@
       ['Lohgo', 'https://lohgo.jyotiprakash.org', 'Logo with turtle graphics and a debugger'],
       ['Tooring', 'https://tooring.jyotiprakash.org', 'theory of computation you can play with, from automata to NP-completeness'],
       ['Sirkit', 'https://sirkit.jyotiprakash.org', 'digital design you can build, run and see inside, from gates to a small processor'],
+      ['Sifer', 'https://sifer.jyotiprakash.org', 'cryptography you can see inside: every cipher, hash and curve opened up, from Enigma to post-quantum'],
       ['NetSim', 'https://netsim.jyotiprakash.org', 'a network simulator you can watch packet by packet'],
     ],
     links: [
