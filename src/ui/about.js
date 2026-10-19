@@ -47,6 +47,7 @@
       ['Sirkit', 'https://sirkit.jyotiprakash.org', 'digital design you can build, run and see inside, from gates to a small processor'],
       ['Sifer', 'https://sifer.jyotiprakash.org', 'cryptography you can see inside: every cipher, hash and curve opened up, from Enigma to post-quantum'],
       ['Nooral', 'https://nooral.jyotiprakash.org', 'machine learning you can see inside: every model opened up, from least squares to a tiny GPT trained in the browser'],
+      ['Proses', 'https://proses.jyotiprakash.org', 'operating systems you can see inside: processes, scheduling, memory, synchronisation and file systems as machines you set up and break'],
       ['NetSim', 'https://netsim.jyotiprakash.org', 'a network simulator you can watch packet by packet'],
     ],
     links: [
